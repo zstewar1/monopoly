@@ -8,17 +8,33 @@ namespace Monopoly.Core {
     public abstract class Space {
 
         /// <summary>
-        /// The action that happens when a player lands on this space.
+        /// A back reference to the board to which this space blongs.
         /// </summary>
-        /// <param name="player">The player that landed on this space.</param>
-        public abstract void OnPlayerLanded (Player player);
+        /// <value>The board.</value>
+        public Board Board { get; set; }
 
+    }
+
+    /// <summary>
+    /// A space that triggers an action when the player lands on it.
+    /// </summary>
+    internal interface ILandActionSpace {
         /// <summary>
-        /// The action that happens when a player passes over this space.
+        /// Action that happens when the player lands on this space.
+        /// </summary>
+        /// <param name="player">The player who landed on the space.</param>
+        void OnPlayerLanded (Player player);
+    }
+
+    /// <summary>
+    /// A space which triggers an action when the player passes over it.
+    /// </summary>
+    internal interface IPassActionSpace {
+        /// <summary>
+        /// The action that happens when a player passes (or lands on) this space.
         /// </summary>
         /// <param name="player">The player who passed the space.</param>
-        public abstract void OnPlayerPassed (Player player);
-
+        void OnPlayerPassed (Player player);
     }
 
     /// <summary>
@@ -30,18 +46,6 @@ namespace Monopoly.Core {
         /// The property associated with this space on the board.
         /// </summary>
         public Property Property { get; set; }
-
-        public virtual void OnPlayerLanded (Player player) {
-            // Owner need not do anything.
-            if (Property.Owner == player)
-                return;
-            else if (Property.Owner == null) {
-                // TODO(zstewar1): Query the player to buy or auction the property.
-            } else {
-                // Maybe charge rent, but needs to be able to gain additional finances (mortgage or sell houses) to meet cost.
-                // Also, may want to implement players needing to request payment.
-            }
-        }
 
     }
 
@@ -57,12 +61,16 @@ namespace Monopoly.Core {
 
     }
 
-    public class GoSpace : Space {
+    public class GoSpace : Space, IPassActionSpace {
 
         /// <summary>
         /// How much money players get for passing go.
         /// </summary>
         public int PassGoValue { get; set; }
+
+        public void OnPlayerPassed (Player player) {
+            player.Money += PassGoValue;
+        }
 
     }
 
@@ -106,6 +114,12 @@ namespace Monopoly.Core {
     /// The Monopoly board. A collection of spaces.
     /// </summary>
     public class Board {
+
+        /// <summary>
+        /// A back reference to the game that owns this board.
+        /// </summary>
+        /// <value>The game.</value>
+        public Game Game { get; set; }
 
         /// <summary>
         /// The collection of spaces which make up the board.

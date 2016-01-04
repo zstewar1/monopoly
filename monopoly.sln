@@ -31,6 +31,9 @@ Global
 		$2.MethodBraceStyle = EndOfLine
 		$2.ConstructorBraceStyle = EndOfLine
 		$2.DestructorBraceStyle = EndOfLine
+		$2.BeforeMethodCallParentheses = False
+		$2.NewParentheses = False
+		$2.SpacesBeforeBrackets = False
 		$2.inheritsSet = Mono
 		$2.inheritsScope = text/x-csharp
 		$2.scope = text/x-csharp

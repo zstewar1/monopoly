@@ -38,6 +38,7 @@
     <Compile Include="src\core\Board.cs" />
     <Compile Include="src\core\ActionCard.cs" />
     <Compile Include="src\core\Game.cs" />
+    <Compile Include="src\core\Exceptions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
