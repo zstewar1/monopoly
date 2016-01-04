@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Monopoly.Core {
 
@@ -6,6 +7,8 @@ namespace Monopoly.Core {
     /// Represents a property which can be owned. Usually associated with a space on the board.
     /// </summary>
     public abstract class Property {
+
+        #region Public Properties
 
         /// <summary>
         /// The name of this property.
@@ -36,12 +39,58 @@ namespace Monopoly.Core {
         /// Whether or not this property is currently mortgaged.
         /// </summary>
         public bool IsMortgaged { get; set; }
+
+        /// <summary>
+        /// Tells if all properties in this property's group are owned by the same player.
+        /// </summary>
+        public bool IsGroupOwned {
+            get { return Owner != null && PropertyGroup.All(p => p.Owner == Owner); }
+        }
+
+        #endregion // Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// Computes the value of this property from the buy price, and any other value it may have.
+        /// </summary>
+        public virtual int GetWorth () {
+            return BuyPrice;
+        }
+
+        /// <summary>
+        /// Tells the largest amount of money that the player can get out of this property through mortgaging 
+        /// and selling houses.
+        /// </summary>
+        public virtual int GetMaxExpenseValue () {
+            return IsMortgaged ? 0 : MortgagePrice;
+        }
+
+        /// <summary>
+        /// Tells the number of properties in this property's group that are owned by the specified player.
+        /// </summary>
+        /// <returns>The owned count.</returns>
+        /// <param name="player">The player to count ownership for.</param>
+        public int GetOwnedCount (Player player) {
+            return PropertyGroup.Count(p => p.Owner == player);
+        }
+
+        /// <summary>
+        /// Calculates the rent owed to the owner.
+        /// </summary>
+        /// <returns>The rent.</returns>
+        public abstract int GetRent ();
+
+        #endregion // Public Methods
+
     }
 
     /// <summary>
     /// A normal property which can be owned and have houses/hotels built on it.
     /// </summary>
     public class ColorProperty : Property {
+
+        #region Public Properties
 
         /// <summary>
         /// The price to add a house to this property. (Hotels are basically just five houses).
@@ -54,10 +103,35 @@ namespace Monopoly.Core {
         public int NumHouses { get; set; }
 
         /// <summary>
-        /// The value to buy the next house. (Also twice the sell value of the house).
+        /// The rent for the number of houses.
         /// </summary>
         public int[] HouseValue { get; private set; }
 
+        #endregion // Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// The worth of a color property takes into account the houses on that property as well as the purchase price.
+        /// </summary>
+        /// <returns>The worth of this property.</returns>
+        public override int GetWorth () {
+            int worth = base.GetWorth();
+            worth += HousePrice * NumHouses;
+            return worth;
+        }
+
+        /// <summary>
+        /// Tells the largest amount of money that the player can get out of this property through mortgaging 
+        /// and selling houses.
+        /// </summary>
+        public override int GetMaxExpenseValue () {
+            int value = base.GetMaxExpenseValue();
+            value += (HousePrice / 2) * NumHouses;
+            return value;
+        }
+
+        #endregion // Public Methods
     }
 
     /// <summary>

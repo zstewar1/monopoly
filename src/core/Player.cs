@@ -67,5 +67,35 @@ namespace Monopoly.Core {
 
         #endregion // Public Events
 
+        #region Public Methods
+
+        /// <summary>
+        /// Gets the total value of this player in cash, property, and buildings.
+        /// </summary>
+        /// <returns>The player's total worth.</returns>
+        public int GetWorth () {
+            int worth = Money;
+            foreach (var prop in OwnedProperties) {
+                worth += prop.GetWorth();
+            }
+            return worth;
+        }
+
+        /// <summary>
+        /// Gets the largest amount of money this player can owe without going bankrupt, based on mortgaging all 
+        /// owned properties, selling all houses/hotels, and using up all cash on hand. Doesn't take into account 
+        /// the possibility of the player making a trade deal with another player for money.
+        /// </summary>
+        /// <returns>The max possible amount of money this player can pay without going bankrupt.</returns>
+        public int GetMaxPossibleExpense () {
+            int value = Money;
+            foreach (var prop in OwnedProperties) {
+                value += prop.GetMaxExpenseValue();
+            }
+            return value;
+        }
+
+        #endregion // Public Methods
+
     }
 }
