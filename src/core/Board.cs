@@ -8,10 +8,9 @@ namespace Monopoly.Core {
     public abstract class Space {
 
         /// <summary>
-        /// A back reference to the board to which this space blongs.
+        /// The game that this space is in.
         /// </summary>
-        /// <value>The board.</value>
-        public Board Board { get; set; }
+        public Game Game { get; set; }
 
     }
 

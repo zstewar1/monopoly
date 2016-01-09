@@ -47,6 +47,11 @@ namespace Monopoly.Core {
             get { return Owner != null && PropertyGroup.All(p => p.Owner == Owner); }
         }
 
+        /// <summary>
+        /// The game that the property belongs to.
+        /// </summary>
+        public Game Game { get; set; }
+
         #endregion // Public Properties
 
         #region Public Methods
@@ -72,6 +77,9 @@ namespace Monopoly.Core {
         /// <returns>The owned count.</returns>
         /// <param name="player">The player to count ownership for.</param>
         public int GetOwnedCount (Player player) {
+            if (player == null || Owner == null) {
+                return 0;
+            }
             return PropertyGroup.Count(p => p.Owner == player);
         }
 
@@ -107,6 +115,12 @@ namespace Monopoly.Core {
         /// </summary>
         public int[] HouseValue { get; private set; }
 
+        /// <summary>
+        /// How much to multiply the base rent by when the whole property group is owned by the same
+        /// player.
+        /// </summary>
+        public int GroupOwnershipMultiplier { get; set; }
+
         #endregion // Public Properties
 
         #region Public Methods
@@ -131,6 +145,16 @@ namespace Monopoly.Core {
             return value;
         }
 
+        public override int GetRent () {
+            if (NumHouses > 0) {
+                return HouseValue[NumHouses];
+            } else if (IsGroupOwned) {
+                return GroupOwnershipMultiplier * HouseValue[0];
+            } else {
+                return HouseValue[0];
+            }
+        }
+
         #endregion // Public Methods
     }
 
@@ -144,6 +168,12 @@ namespace Monopoly.Core {
         /// </summary>
         public int[] OwnedCountPrice { get; private set; }
 
+        /// <summary>
+        /// Rent for the railroad is computed from the number of railroads owned by that player.
+        /// </summary>
+        public override int GetRent () {
+            return OwnedCountPrice[GetOwnedCount(Owner)];
+        }
     }
 
     /// <summary>
@@ -155,6 +185,10 @@ namespace Monopoly.Core {
         /// Tells how much the dice roll is multiplied by to get the rent amount.
         /// </summary>
         public int[] OwnedCountMultiplier { get; private set; }
+
+        public override int GetRent () {
+            return OwnedCountMultiplier[GetOwnedCount(Owner)] * Game.Dice.LastThrow.ThrowTotal;
+        }
 
     }
 }

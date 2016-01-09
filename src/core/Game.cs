@@ -20,6 +20,11 @@ namespace Monopoly.Core {
         #region Public Properties
 
         /// <summary>
+        /// The dice being used for this game.
+        /// </summary>
+        public IDice Dice { get; set; }
+
+        /// <summary>
         /// The board being used for this game.
         /// </summary>
         /// <value>The board.</value>

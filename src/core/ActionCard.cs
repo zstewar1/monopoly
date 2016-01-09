@@ -8,6 +8,11 @@ namespace Monopoly.Core {
     /// </summary>
     public abstract class ActionCard {
 
+        /// <summary>
+        /// The game that this ActionCard is in.
+        /// </summary>
+        public Game Game { get; set; }
+
     }
 
     /// <summary>

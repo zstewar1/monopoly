@@ -55,6 +55,11 @@ namespace Monopoly.Core {
         /// </summary>
         public List<SavableActionCard> SavedActions { get; private set; }
 
+        /// <summary>
+        /// The game that the player belongs to.
+        /// </summary>
+        public Game Game { get; set; }
+
         #endregion PublicProperties
 
         #region Public Events
@@ -82,11 +87,13 @@ namespace Monopoly.Core {
         }
 
         /// <summary>
-        /// Gets the largest amount of money this player can owe without going bankrupt, based on mortgaging all 
-        /// owned properties, selling all houses/hotels, and using up all cash on hand. Doesn't take into account 
-        /// the possibility of the player making a trade deal with another player for money.
+        /// Gets the largest amount of money this player can owe without going bankrupt, based on 
+        /// mortgaging all owned properties, selling all houses/hotels, and using up all cash on
+        /// hand. Doesn't take into account the possibility of the player making a trade deal with
+        /// another player for money.
         /// </summary>
-        /// <returns>The max possible amount of money this player can pay without going bankrupt.</returns>
+        /// <returns>The max possible amount of money this player can pay without going
+        /// bankrupt.</returns>
         public int GetMaxPossibleExpense () {
             int value = Money;
             foreach (var prop in OwnedProperties) {
