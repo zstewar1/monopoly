@@ -5,6 +5,22 @@ using System.Linq;
 namespace Monopoly.Core {
 
     /// <summary>
+    /// Represents money owed by the player which they do not have enough cash to pay for directly.
+    /// The player may need to mortgage properties or make trades in order to pay for this
+    /// transaction. If they still can't get enough money to pay for it, they may be forced to fold.
+    /// </summary>
+    public struct PendingTransaction {
+        /// <summary>
+        /// How much money is owed.
+        /// </summary>
+        public int Money;
+        /// <summary>
+        /// Who will receive the money.
+        /// </summary>
+        public Player Recipient;
+    }
+
+    /// <summary>
     /// Represents a player in the game.
     /// </summary>
     public class Player {
@@ -41,6 +57,11 @@ namespace Monopoly.Core {
                 }
             }
         }
+
+        /// <summary>
+        /// List of transactions which the player could not immediately afford.
+        /// </summary>
+        public List<PendingTransaction> PendingTransactions { get; private set; }
 
         /// <summary>
         /// The collection of properties owned by this player.

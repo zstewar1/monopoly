@@ -83,6 +83,11 @@ namespace Monopoly.Core {
         /// Checks if the current turn has been completed successfully, then ends the turn and
         /// </summary>
         public void EndTurn () {
+            if (Players.All(p => p.PendingTransactions.Count == 0)) {
+                currentPlayerIndex = (currentPlayerIndex + 1) % Players.Count;
+            } else {
+                throw new TurnIncompleteException("Players still had pending transactions.");
+            }
         }
 
         #endregion // Public Methods
