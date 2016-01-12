@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Monopoly.Core {
 
@@ -36,11 +37,29 @@ namespace Monopoly.Core {
         public List<Player> Players { get; private set; }
 
         /// <summary>
+        /// List of players who have been eliminated from the game.
+        /// </summary>
+        public List<Player> EliminatedPlayers { get; private set; }
+
+        /// <summary>
         /// Retrieves the player whose turn it currently is.
         /// </summary>
         public Player CurrentPlayer { 
             get { 
                 return Players[currentPlayerIndex]; 
+            }
+        }
+
+        /// <summary>
+        /// Gets the winner of the game -- once all other players have been eliminated, the winner
+        /// is the one who is left.
+        /// </summary>
+        public Player Winner {
+            get {
+                if (Players.Count == 1)
+                    return Players[0];
+                else
+                    return null;
             }
         }
 
@@ -59,6 +78,12 @@ namespace Monopoly.Core {
         #endregion // Public Events
 
         #region Public Methods
+
+        /// <summary>
+        /// Checks if the current turn has been completed successfully, then ends the turn and
+        /// </summary>
+        public void EndTurn () {
+        }
 
         #endregion // Public Methods
 

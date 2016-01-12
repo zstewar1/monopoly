@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Monopoly.Core {
 
@@ -11,7 +12,8 @@ namespace Monopoly.Core {
         #region Private Variables
 
         /// <summary>
-        /// Internal storage for Money property.
+        /// The player's current money. Like properties, this is tracked independently of the 
+        /// transaction history.
         /// </summary>
         private int money;
 

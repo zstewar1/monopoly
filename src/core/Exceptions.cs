@@ -25,4 +25,13 @@ namespace Monopoly.Core {
         
     }
 
+    /// <summary>
+    /// Raised when you attempt to end the current turn before the turn is complete.
+    /// </summary>
+    public class TurnIncompleteException : MonopolyException {
+        public TurnIncompleteException (string message)
+            : base(message) {
+        }
+    }
+
 }
